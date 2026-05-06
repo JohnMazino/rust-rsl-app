@@ -20,12 +20,12 @@ const VISION_BUNDLE: Asset = asset!("/assets/mediapipe/wasm/vision_bundle.mjs");
 const VISION_WASM: Asset = asset!("/assets/mediapipe/wasm");
 const GESTURE_MODEL: Asset = asset!("/assets/mediapipe/gesture_recognizer.task");
 
-const ICON_HOME: Asset = asset!("/assets/icon/home.png");
-const ICON_VIDEO: Asset = asset!("/assets/icon/camera.png");
-const ICON_SETTINGS: Asset = asset!("/assets/icon/settings.png");
-const ICON_ARROW: Asset = asset!("/assets/icon/arrow.png");
-
-const PAPER: Asset = asset!("/public/paper.png", AssetOptions::builder().with_hash_suffix(false));
+const ICON_HOME: Asset = asset!("/assets/icon/home.png", AssetOptions::image().with_webp());
+const ICON_VIDEO: Asset = asset!("/assets/icon/camera.png", AssetOptions::image().with_webp());
+const ICON_SETTINGS: Asset = asset!("/assets/icon/settings.png", AssetOptions::image().with_webp());
+const ICON_ARROW: Asset = asset!("/assets/icon/arrow.png", AssetOptions::image().with_webp());
+const ICON_EXIT: Asset = asset!("/assets/icon/exit.png", AssetOptions::image().with_webp());
+const PAPER: Asset = asset!("/public/paper.png", AssetOptions::image().with_webp());
 const MAIN_CSS: Asset = asset!("/assets/main.css");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 const ACCORDING_CSS: Asset = asset!("/src/components/accordion/style.css");
@@ -88,7 +88,7 @@ fn App() -> Element {
 fn Header() -> Element {
 
     rsx! {
-        nav { class: "fixed bottom-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-xl border-t border-white/10",
+        nav {
             div { class: "max-w-lg mx-auto flex items-center justify-around h-16 px-4",
 
                 // Главная
@@ -570,16 +570,16 @@ fn Translate() -> Element {
     }
 }
 
-
 #[component]
 fn GestureDetail(id: i64) -> Element {
     let mut gesture = use_signal(|| None::<Gesture>);
     let mut loading = use_signal(|| true);
+    let mut editing_desc = use_signal(String::new);
+    let mut is_saving = use_signal(|| false);
 
     use_effect(move || {
         spawn(async move {
             loading.set(true);
-
             let found = with_db(|db| {
                 db.prepare(
                     r#"
@@ -599,39 +599,80 @@ fn GestureDetail(id: i64) -> Element {
                     }).ok()
             });
 
+            if let Some(g) = &found {
+                editing_desc.set(g.description.clone().unwrap_or_default());
+            }
             gesture.set(found);
             loading.set(false);
         });
     });
+
+    // Функция сохранения
+    let save_description = move |_| {
+        let new_desc = editing_desc();
+
+        is_saving.set(true);
+
+        spawn(async move {
+            let success = with_db(|db| {
+                db.prepare(
+                    "UPDATE gestures SET description = ? WHERE id = ?"
+                ).unwrap()
+                    .execute((new_desc.clone(), id))
+                    .is_ok()
+            });
+
+            if success {
+                // Обновляем локальное состояние
+                gesture.set(gesture().map(|mut g| {
+                    g.description = if new_desc.is_empty() { None } else { Some(new_desc.clone()) };
+                    g
+                }));
+            }
+
+            is_saving.set(false);
+        });
+    };
 
     rsx! {
         div { class: "p-6 max-w-2xl mx-auto" ,
             Link {
                 to: Route::Home {},
                 class: "back",
-                h1 {"←Назад к списку"}
+                img {
+                    src: ICON_EXIT,
+                    class: "w-12 h-12",
+                }
             }
 
             if let Some(g) = gesture() {
-                div {
-                    {
+                    div {{
                         let asset_path = format!("{}/{}", GIFS, g.video_filename);
                         rsx! {
-                            div {
-                                img {
-                                    src: "{asset_path}",
-                                    class: "gif_gesture",
-                                    alt: "{g.name}",
-                                    loading: "lazy"
-                                }
+                        img {
+                            src: "{asset_path}",
+                            class: "gif_gesture",
+                            alt: "{g.name}",
+                            loading: "lazy"
+                            }
+                        }
+                    }}
+                    // Редактируемое описание
+                    div {
+                        textarea {
+                            value: "{editing_desc}",
+                            oninput: move |e| editing_desc.set(e.value()),
+                            placeholder: "{editing_desc}"
+                        }
+
+                        div {
+                            button {
+                                class: "save_description_button",
+                                onclick: save_description,
+                                "Сохранить описание"
                             }
                         }
                     }
-
-                    if let Some(desc) = &g.description {
-                        input { value: "{desc}" }
-                    }
-                }
             }
         }
     }
