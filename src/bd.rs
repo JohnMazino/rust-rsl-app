@@ -63,7 +63,7 @@ thread_local! {
 
         conn.execute_batch(
             r#"
-            CREATE TABLE gestures (
+            CREATE TABLE IF NOT EXISTS gestures (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL UNIQUE,
                 video_filename TEXT NOT NULL,

@@ -17,9 +17,7 @@ struct Gesture {
     name: String,
     video_filename: String,
     description: Option<String>,
-    category: Option<String>,
-    is_favorite: bool,
-    created_at: String,
+    category: Option<String>
 }
 
 const VISION_BUNDLE: Asset = asset!("/assets/mediapipe/wasm/vision_bundle.mjs");
@@ -202,8 +200,7 @@ fn Home() -> Element {
             let data = with_db(|db| {
                 let mut stmt = db.prepare(
                     r#"
-                    SELECT id, name, video_filename, description, category,
-                           is_favorite, created_at
+                    SELECT id, name, video_filename, description, category
                     FROM gestures
                     ORDER BY category ASC, name ASC
                     "#
@@ -215,9 +212,7 @@ fn Home() -> Element {
                         name: row.get(1)?,
                         video_filename: row.get(2)?,
                         description: row.get(3)?,
-                        category: row.get(4)?,
-                        is_favorite: row.get(5)?,
-                        created_at: row.get(6)?,
+                        category: row.get(4)?
                     })
                 })
                     .unwrap()
@@ -445,8 +440,7 @@ fn Settings() -> Element {
             let data = with_db(|db| {
                 let mut stmt = db.prepare(
                     r#"
-                    SELECT id, name, video_filename, description, category,
-                           is_favorite, created_at
+                    SELECT id, name, video_filename, description, category
                     FROM gestures
                     ORDER BY name ASC
                     "#
@@ -458,9 +452,7 @@ fn Settings() -> Element {
                         name: row.get(1)?,
                         video_filename: row.get(2)?,
                         description: row.get(3)?,
-                        category: row.get(4)?,
-                        is_favorite: row.get(5)?,
-                        created_at: row.get(6)?,
+                        category: row.get(4)?
                     })
                 })
                     .unwrap()
@@ -507,12 +499,6 @@ fn Settings() -> Element {
                                     th { class: "px-6 py-5 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider",
                                         "Категория"
                                     }
-                                    th { class: "px-6 py-5 text-center text-xs font-semibold text-gray-400 uppercase tracking-wider w-20",
-                                        "Избранное"
-                                    }
-                                    th { class: "px-6 py-5 text-right text-xs font-semibold text-gray-400 uppercase tracking-wider",
-                                        "Дата"
-                                    }
                                 }
                             }
                             tbody { class: "divide-y divide-white/10 text-sm",
@@ -537,16 +523,6 @@ fn Settings() -> Element {
                                             span { class: "inline-flex px-3 py-1 text-xs font-medium rounded-full bg-sky-500/10 text-sky-400 whitespace-nowrap",
                                                 {gesture.category.as_deref().unwrap_or("без категории")}
                                             }
-                                        }
-                                        td { class: "px-6 py-4 text-center text-lg",
-                                            if gesture.is_favorite {
-                                                "★"
-                                            } else {
-                                                "☆"
-                                            }
-                                        }
-                                        td { class: "px-6 py-4 text-right text-xs text-gray-500 whitespace-nowrap",
-                                            "{gesture.created_at}"
                                         }
                                     }
                                 }
@@ -611,8 +587,7 @@ fn GestureDetail(id: i64) -> Element {
             let found = with_db(|db| {
                 db.prepare(
                     r#"
-                    SELECT id, name, video_filename, description, category,
-                           is_favorite, created_at
+                    SELECT id, name, video_filename, description, category
                     FROM gestures
                     WHERE id = ?
                     "#
@@ -623,9 +598,7 @@ fn GestureDetail(id: i64) -> Element {
                             name: row.get(1)?,
                             video_filename: row.get(2)?,
                             description: row.get(3)?,
-                            category: row.get(4)?,
-                            is_favorite: row.get(5)?,
-                            created_at: row.get(6)?,
+                            category: row.get(4)?
                         })
                     }).ok()
             });
