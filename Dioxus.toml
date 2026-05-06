@@ -1,0 +1,38 @@
+[application]
+name = "PISAPOPA"
+version = "1.0.0"
+
+[web]
+asset_dir = "public"
+
+[mobile]
+asset_dir = "public"
+
+[web.app]
+
+# HTML title tag content
+title = "PISAPOPA"
+
+# include `assets` in web platform
+[web.resource]
+
+# Additional CSS style files
+style = []
+
+# Additional JavaScript files
+script = []
+
+[web.resource.dev]
+
+# Javascript code file
+# serve: [dev-server] only
+script = []
+
+[android]
+package = "com.pisapopa.app"
+version_name = "1.0.0"
+version_code = 1
+
+[android.permissions]
+"android.permission.CAMERA" = { description = "Распознавание жестов через камеру" }
+"android.permission.VIBRATE" = { description = "Вибрация" }

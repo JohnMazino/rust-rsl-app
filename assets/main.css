@@ -1,0 +1,127 @@
+/* Глобальные переменные с цветовой схемой */
+:root {
+    --bg-white: #FAF9F6;
+    --stroke-color: #121629;
+    /*
+    --bg-white: #000000;
+    --stroke-color: #ffffff;
+    */
+
+    --button-bg: #ffffff;
+    /*
+    --button-bg: #000000;
+    */
+    --button-border: #121629;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border-radius: 0;
+}
+
+body {
+    color: var(--stroke-color);
+    background-color: var(--bg-white);
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+    font-weight: normal;
+    color: var(--stroke-color);
+    font-size: 2.15rem;
+}
+.back {
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+
+/* Навигация */
+nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+
+    background: var(--bg-white);
+}
+main,
+div.p-6,
+.min-h-screen {
+    padding-bottom: 90px !important;
+}
+
+nav span {
+    font-size: 1.35rem;
+    transition: all 0.3s ease;
+}
+
+
+/* Кнопки */
+button,
+.button,
+a.button {
+    font-size: 3.4rem;
+    padding: 0.8rem 2rem;
+    background: var(--button-bg);
+    color: var(--stroke-color);
+    border: 2px solid var(--stroke-color);
+    box-shadow: 2px 2px 0 #121629;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.camera_button {
+    margin-top: 1rem;
+    font-size: 2rem;
+    width: 95%;
+}
+.sketch-btn-1 {
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.sketch-btn-2 {
+    border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+}
+
+.sketch-btn-3 {
+    border-radius: 8px 40px 80px 20px;
+}
+input, textarea {
+    font-size: 2.5rem;
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--stroke-color);
+    background: white;
+    width: 80%;
+    box-shadow: 4px 4px 0 #121629;
+    margin-top: 5rem;
+    margin-left: 2.5rem;
+}
+input:focus {
+    outline: none;
+}
+
+/* Ссылки */
+a {
+    color: var(--stroke-color);
+    text-decoration: underline wavy 2px;
+    text-underline-offset: 8px;
+}
+/* Canvas для видео */
+canvas {
+    margin-top: 3rem;
+    border-radius: 16px;
+    width: 90%;
+}
+/* Картинки */
+img {}
+.gif_gesture {
+    margin-top: 10rem;
+    border-radius: 2rem;
+}
