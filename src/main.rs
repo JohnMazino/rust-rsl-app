@@ -427,7 +427,7 @@ fn Video() -> Element {
             }
 
             canvas {
-                id: "canvas",
+                id: "canvas"
             }
         }
     }
