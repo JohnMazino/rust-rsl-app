@@ -1,14 +1,10 @@
 mod bd;
 use bd::*;
 mod components;
-use components::*;
 use dioxus::prelude::*;
 use std::collections::HashMap;
-use std::ptr::hash;
 use dioxus::desktop::Config;
-use dioxus::html::a::class;
 use dioxus_primitives::accordion::*;
-use crate::components::button::Button;
 use manganis::AssetOptions;
 
 #[derive(Clone, PartialEq)]
