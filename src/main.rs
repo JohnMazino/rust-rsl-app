@@ -97,8 +97,9 @@ fn Header() -> Element {
                     class: "flex flex-col items-center justify-center flex-1 py-1 text-white/80 hover:text-emerald-400 transition-all duration-300 relative group",
                     img {
                         src: ICON_HOME,
+                        loading: "lazy",
                         class: "w-12 h-12 transition-transform group-active:scale-110",
-                        alt: "Главная",
+                        alt: "Главная"
                     }
                     /*span { class: "text-xs font-medium tracking-wider mt-1", "Главная" }*/
                 }
@@ -109,8 +110,9 @@ fn Header() -> Element {
                     class: "flex flex-col items-center justify-center flex-1 py-1 text-white/80 hover:text-emerald-400 transition-all duration-300 relative group",
                     img {
                         src: ICON_VIDEO,
+                        loading: "lazy",
                         class: "w-15 h-15 transition-transform group-active:scale-110",
-                        alt: "Видео",
+                        alt: "Видео"
                     }
                     /*span { class: "text-xs font-medium tracking-wider mt-1", "Видео" }*/
                 }
@@ -120,8 +122,9 @@ fn Header() -> Element {
                     class: "flex flex-col items-center justify-center flex-1 py-1 text-white/80 hover:text-emerald-400 transition-all duration-300 relative group",
                     img {
                         src: ICON_SETTINGS,
+                        loading: "lazy",
                         class: "w-11 h-11 transition-transform group-active:scale-110",
-                        alt: "Переводчик",
+                        alt: "Переводчик"
                     }
                     /*span { class: "text-xs font-medium tracking-wider mt-1", "Переводчик" }*/
                 }
@@ -132,8 +135,9 @@ fn Header() -> Element {
                     class: "flex flex-col items-center justify-center flex-1 py-1 text-white/80 hover:text-emerald-400 transition-all duration-300 relative group",
                     img {
                         src: ICON_SETTINGS,
+                        loading: "lazy",
                         class: "w-11 h-11 transition-transform group-active:scale-110",
-                        alt: "Настройки",
+                        alt: "Настройки"
                     }
                     /*span { class: "text-xs font-medium tracking-wider mt-1", "Настройки" }*/
                 }
@@ -161,6 +165,7 @@ fn CategoryAccordion(category: String, gestures: Vec<Gesture>) -> Element {
                     class: "accordion-expand-icon",
                     img {
                         src: ICON_ARROW,
+                        loading: "lazy",
                         width: "30"
                     }
                 }
@@ -564,7 +569,8 @@ fn Translate() -> Element {
         }
         div {h1 { "ТУТ "}
             img {
-                src: PAPER
+                src: PAPER,
+                loading: "lazy",
             }
         }
     }
@@ -635,25 +641,25 @@ fn GestureDetail(id: i64) -> Element {
     };
 
     rsx! {
-        div { class: "p-6 max-w-2xl mx-auto" ,
+        div {
             Link {
                 to: Route::Home {},
                 class: "back",
                 img {
                     src: ICON_EXIT,
+                    loading: "lazy",
                     class: "w-12 h-12",
                 }
             }
-
             if let Some(g) = gesture() {
                     div {{
                         let asset_path = format!("{}/{}", GIFS, g.video_filename);
                         rsx! {
                         img {
                             src: "{asset_path}",
+                            loading: "lazy",
                             class: "gif_gesture",
                             alt: "{g.name}",
-                            loading: "lazy"
                             }
                         }
                     }}
